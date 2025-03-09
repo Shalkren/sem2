@@ -129,6 +129,42 @@ class hash_map{
             }
         }
     } // Вывод таблицы
+    // Итератор
+    class iterator {
+    private:
+        hash_map& map;
+        int index;
+
+    public:
+        iterator(hash_map& m, int i) : map(m), index(i) {}
+
+        pair<int, int>& operator*() {
+            return map.table[index];
+        }
+
+        iterator& operator++() {
+            do {
+                index++;
+            } while (index < map.size && map.table[index].first == -1);
+            return *this;
+        }
+
+        bool operator!=(const iterator& other) const {
+            return index != other.index;
+        }
+    };
+
+    iterator begin() {
+        int i = 0;
+        while (i < size && table[i].first == -1) {
+            i++;
+        }
+        return iterator(*this, i);
+    }
+
+    iterator end() {
+        return iterator(*this, size);
+    }
 
 };
 
@@ -138,5 +174,8 @@ int main(){
         a.insert(i);
     }
     a.print();
+    for (auto it = a.begin(); it != a.end(); ++it) {
+        cout << "key: " << (*it).first << " value: " << (*it).second << "\n";
+    }
     return 0;
 }
